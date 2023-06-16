@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/action_radio"
+        android:title="@string/item_radio"
+        android:icon="@drawable/item_radio" />
+    <item android:id="@+id/action_bookmark"
+        android:title="@string/item_bookmark"
+        android:icon="@drawable/item_star_black" />
+    <item android:id="@+id/action_podcast"
+        android:title="@string/item_podcast"
+        android:icon="@drawable/item_podcast" />
+    <item android:id="@+id/action_setup"
+        android:title="@string/item_setup"
+        android:icon="@drawable/item_settings" />
+</menu>
