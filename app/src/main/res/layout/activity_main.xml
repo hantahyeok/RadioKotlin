@@ -22,6 +22,7 @@
         app:itemIconTint="@drawable/menu_selector_color"
         app:itemTextColor="@drawable/menu_selector_color"
         app:labelVisibilityMode="labeled"
+        android:background="#9FD7BF"
         />
 
 

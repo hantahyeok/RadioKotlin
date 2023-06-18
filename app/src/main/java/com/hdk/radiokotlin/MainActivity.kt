@@ -34,6 +34,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+
+
+
         val bnv_main = findViewById<BottomNavigationView>(R.id.bnv_main)
 
         //supportFragmentManager.beginTransaction().add(R.id.fl_con, NaviHomeFragment()).commit()
