@@ -78,7 +78,7 @@ class RadioFragment : Fragment(), OnItemSelectedListener {
         "\uD83C\uDDF1\uD83C\uDDFB LV",
         "\uD83C\uDDF1\uD83C\uDDF9 LT",
         "\uD83C\uDDF9\uD83C\uDDED TH",
-        "\uD83C\uDDF0\uD83C\uDDF7 KR",
+        "\uD83C\uDDF0\uD83C\uDDF7 KR",// 대한민국
         "\uD83C\uDDEA\uD83C\uDDEA EE",
         "\uD83C\uDDE7\uD83C\uDDE6 BA",
         "\uD83C\uDDF2\uD83C\uDDEA ME",
@@ -134,6 +134,7 @@ class RadioFragment : Fragment(), OnItemSelectedListener {
         var arrayAdapter = ArrayAdapter(requireContext(), R.layout.spinner_dropdown_item, spList)
         binding.spinner.adapter = arrayAdapter
         binding.spinner.onItemSelectedListener = this
+        binding.spinner.setSelection(57)
 
         return binding.root
     }
@@ -143,17 +144,25 @@ class RadioFragment : Fragment(), OnItemSelectedListener {
         var str = selectedItem.substringAfterLast(" ")
 
         thread {
-            var server: String = "https://nl1.api.radio-browser.info/json/stations/search?limit=10&countrycode=${str}&hidebroken=true&order=clickcount&reverse=true"
+            var server: String =
+                "https://nl1.api.radio-browser.info/json/stations/search?limit=10000&countrycode=${str}&hidebroken=true&order=clickcount&reverse=true"
             var url = URL(server)
             val jsonText = url.readText()
 
             val gson = Gson()
-            val stations: Array<RadioStation> = gson.fromJson(jsonText, Array<RadioStation>::class.java)
+            val stations: Array<RadioStation> =
+                gson.fromJson(jsonText, Array<RadioStation>::class.java)
 
             var items = mutableListOf<RadioStation>()
             items.clear()
             for (position in stations) {
-                items.add(RadioStation(position.name ?: ""))
+                items.add(
+                    RadioStation(
+                        position.name,
+                        position.favicon,
+                        position.url,
+                    )
+                )
             }
 
             requireActivity().runOnUiThread {
