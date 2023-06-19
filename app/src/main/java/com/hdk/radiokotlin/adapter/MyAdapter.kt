@@ -4,6 +4,7 @@ import android.content.Context
 import android.media.AudioManager
 import android.media.MediaPlayer
 import android.os.AsyncTask
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,15 +13,18 @@ import com.bumptech.glide.Glide
 import com.hdk.radiokotlin.R
 import com.hdk.radiokotlin.data.RadioStation
 import com.hdk.radiokotlin.databinding.RecyclerviewItemBinding
+import kotlin.concurrent.thread
 
-class MyAdapter constructor(var context: Context, var items: MutableList<RadioStation>): RecyclerView.Adapter<MyAdapter.VH>(){
+class MyAdapter constructor(var context: Context, var items: MutableList<RadioStation>) :
+    RecyclerView.Adapter<MyAdapter.VH>() {
 
-    inner class VH constructor(itemView: View): RecyclerView.ViewHolder(itemView){
+    inner class VH constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val binding: RecyclerviewItemBinding = RecyclerviewItemBinding.bind(itemView)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
-        val itemView: View = LayoutInflater.from(context).inflate(R.layout.recyclerview_item, parent,false)
+        val itemView: View =
+            LayoutInflater.from(context).inflate(R.layout.recyclerview_item, parent, false)
         return VH(itemView)
     }
 
@@ -36,22 +40,17 @@ class MyAdapter constructor(var context: Context, var items: MutableList<RadioSt
 
 
         holder.binding.recyclerItem.setOnClickListener {
-            val mediaPlayer = MediaPlayer()
-            mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC)
-            mediaPlayer.setDataSource(item.url)
-
-            val asyncTask = object : AsyncTask<Unit, Unit, Unit>() {
-                override fun doInBackground(vararg params: Unit?) {
-                    try {
-                        mediaPlayer.prepare()
-                        mediaPlayer.start()
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                    }
-                }
-            }
-
-            asyncTask.execute()
+//
+//            val url = item.url // your URL here
+//            val mediaPlayer: MediaPlayer? = MediaPlayer().apply {
+//                setAudioStreamType(AudioManager.STREAM_MUSIC)
+//                setDataSource(url)
+//                setOnPreparedListener {
+//                    // 준비 완료 후 실행할 작업
+//                    start() // 재생 시작
+//                }
+//                prepareAsync() // 비동기적으로 미디어 준비
+//            }
         }
 
     }
