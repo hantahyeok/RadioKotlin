@@ -5,18 +5,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="12dp"
-    android:background="@drawable/bg"
+    android:layout_margin="0dp"
+    android:id="@+id/recyclerItem"
     >
+<!-- 대리자, 람다 // 지하철 좌표 이동-->
 
     <ImageView
         android:id="@+id/iv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/example"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@drawable/item_star"
         android:layout_gravity="center"
-        android:scaleType="centerInside"
+        android:scaleType="centerCrop"
         android:layout_margin="16dp"
+        android:foreground="@drawable/bg"
+        android:padding="16dp"
         />
 
     <TextView
@@ -24,7 +27,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Ebs 외국어 라디오 (i-radio)"
-        android:maxEms="10"
+        android:maxEms="5"
         android:maxLines="1"
         android:ellipsize="end"
         android:textSize="12sp"

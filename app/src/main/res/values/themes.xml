@@ -2,8 +2,23 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.RadioKotlin" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+<!--         <item name="colorPrimary">@color/my_light_pr/imary</item> -->
     </style>
 
-    <style name="Theme.RadioKotlin" parent="Base.Theme.RadioKotlin" />
+    <style name="Theme.RadioKotlin" parent="Base.Theme.RadioKotlin">
+        <item name="colorPrimary">@color/brand</item>
+    </style>
+
+    <style name="CustomBottomNavigationStyle" parent="Widget.MaterialComponents.BottomNavigationView">
+        <!-- 선택된 항목의 포커스 효과를 투명하게 설정 -->
+        <item name="android:foreground">@null</item>
+        <item name="android:backgroundTint">@android:color/transparent</item>
+        <item name="android:outlineProvider">@null</item>
+        <item name="android:elevation">0dp</item>
+    </style>
+
+    <style name="CustomSpinnerStyle" parent="Widget.AppCompat.Spinner.DropDown">
+        <item name="android:popupBackground">@android:color/white</item>
+        <item name="android:dropDownHeight">200dp</item>
+    </style>
 </resources>

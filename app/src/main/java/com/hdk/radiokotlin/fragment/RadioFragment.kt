@@ -8,10 +8,11 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemSelectedListener
 import android.widget.ArrayAdapter
+import android.widget.PopupWindow
 import com.google.gson.Gson
-import com.hdk.radiokotlin.MyAdapter
+import com.hdk.radiokotlin.adapter.MyAdapter
 import com.hdk.radiokotlin.R
-import com.hdk.radiokotlin.RadioStation
+import com.hdk.radiokotlin.data.RadioStation
 import com.hdk.radiokotlin.databinding.FragmentRadioBinding
 import java.net.URL
 import kotlin.concurrent.thread
@@ -132,6 +133,12 @@ class RadioFragment : Fragment(), OnItemSelectedListener {
         binding = FragmentRadioBinding.inflate(layoutInflater)
 
         var arrayAdapter = ArrayAdapter(requireContext(), R.layout.spinner_dropdown_item, spList)
+        binding.spinner.adapter = arrayAdapter
+
+        // dropDown 위치
+        binding.spinner.dropDownHorizontalOffset = 30
+        binding.spinner.dropDownVerticalOffset = -200
+
         binding.spinner.adapter = arrayAdapter
         binding.spinner.onItemSelectedListener = this
         binding.spinner.setSelection(57)

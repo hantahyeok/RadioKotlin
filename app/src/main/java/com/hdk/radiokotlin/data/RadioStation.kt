@@ -1,4 +1,4 @@
-package com.hdk.radiokotlin
+package com.hdk.radiokotlin.data
 
 data class RadioStation(
     var name: String,

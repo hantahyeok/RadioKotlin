@@ -25,6 +25,8 @@ import java.io.IOException
 
 class MainActivity : AppCompatActivity() {
 
+    private var currentFragment: Fragment? = null
+
     private val radioFragment by lazy { RadioFragment() }
     private val bookMarkFragment by lazy { BookMarkFragment() }
     private val podcastFragment by lazy { PodcastFragment() }
@@ -66,10 +68,26 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun changeFragment(fragment: Fragment) {
-        supportFragmentManager
-            .beginTransaction()
-            .replace(R.id.frame_layout, fragment)
-            .commit()
+//        supportFragmentManager
+//            .beginTransaction()
+//            .replace(R.id.frame_layout, fragment)
+//            .commit()
+
+        val fragmentManager = supportFragmentManager.beginTransaction()
+
+        if (currentFragment != null) {
+            fragmentManager.hide(currentFragment!!)
+        }
+
+        if (fragment.isAdded) {
+            fragmentManager.show(fragment)
+        } else {
+            fragmentManager.add(R.id.frame_layout, fragment)
+        }
+
+        fragmentManager.commit()
+
+        currentFragment = fragment
     }
 
 }
