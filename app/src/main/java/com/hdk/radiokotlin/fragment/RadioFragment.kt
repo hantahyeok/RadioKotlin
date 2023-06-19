@@ -5,12 +5,18 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.AdapterView.OnItemSelectedListener
 import android.widget.ArrayAdapter
-import android.widget.Spinner
+import com.google.gson.Gson
+import com.hdk.radiokotlin.MyAdapter
 import com.hdk.radiokotlin.R
+import com.hdk.radiokotlin.RadioStation
 import com.hdk.radiokotlin.databinding.FragmentRadioBinding
+import java.net.URL
+import kotlin.concurrent.thread
 
-class RadioFragment : Fragment() {
+class RadioFragment : Fragment(), OnItemSelectedListener {
 
     private lateinit var binding: FragmentRadioBinding
 
@@ -117,15 +123,50 @@ class RadioFragment : Fragment() {
         "\uD83C\uDDE6\uD83C\uDDFF AZ",
     )
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
-        var v = inflater.inflate(R.layout.fragment_radio, container, false)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
 
         binding = FragmentRadioBinding.inflate(layoutInflater)
 
         var arrayAdapter = ArrayAdapter(requireContext(), R.layout.spinner_dropdown_item, spList)
         binding.spinner.adapter = arrayAdapter
+        binding.spinner.onItemSelectedListener = this
 
         return binding.root
+    }
+
+    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+        var selectedItem = spList[position]
+        var str = selectedItem.substringAfterLast(" ")
+
+        thread {
+            var server: String = "https://nl1.api.radio-browser.info/json/stations/search?limit=10&countrycode=${str}&hidebroken=true&order=clickcount&reverse=true"
+            var url = URL(server)
+            val jsonText = url.readText()
+
+            val gson = Gson()
+            val stations: Array<RadioStation> = gson.fromJson(jsonText, Array<RadioStation>::class.java)
+
+            var items = mutableListOf<RadioStation>()
+            items.clear()
+            for (position in stations) {
+                items.add(RadioStation(position.name ?: ""))
+            }
+
+            requireActivity().runOnUiThread {
+                var adapter = MyAdapter(requireContext(), items)
+                binding.recyclerView.adapter?.notifyDataSetChanged()
+                binding.recyclerView.adapter = adapter
+            }
+        }
+
+
+    }
+
+    override fun onNothingSelected(parent: AdapterView<*>?) {
+        TODO("Not yet implemented")
     }
 }
