@@ -1,6 +1,8 @@
 package com.hdk.radiokotlin.fragment
 
+import android.media.MediaPlayer
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -9,15 +11,17 @@ import android.widget.AdapterView
 import android.widget.AdapterView.OnItemSelectedListener
 import android.widget.ArrayAdapter
 import android.widget.PopupWindow
+import android.widget.Toast
 import com.google.gson.Gson
 import com.hdk.radiokotlin.adapter.MyAdapter
 import com.hdk.radiokotlin.R
 import com.hdk.radiokotlin.data.RadioStation
 import com.hdk.radiokotlin.databinding.FragmentRadioBinding
+import java.io.IOException
 import java.net.URL
 import kotlin.concurrent.thread
 
-class RadioFragment : Fragment(), OnItemSelectedListener {
+class RadioFragment : Fragment(), OnItemSelectedListener, MyAdapter.ItemClickListener {
 
     private lateinit var binding: FragmentRadioBinding
 
@@ -124,11 +128,15 @@ class RadioFragment : Fragment(), OnItemSelectedListener {
         "\uD83C\uDDE6\uD83C\uDDFF AZ",
     )
 
+    private lateinit var mediaPlayer: MediaPlayer
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+        mediaPlayer = MediaPlayer()
 
         binding = FragmentRadioBinding.inflate(layoutInflater)
 
@@ -168,12 +176,13 @@ class RadioFragment : Fragment(), OnItemSelectedListener {
                         position.name,
                         position.favicon,
                         position.url,
+                        position.url_resolved,
                     )
                 )
             }
 
             requireActivity().runOnUiThread {
-                var adapter = MyAdapter(requireContext(), items)
+                var adapter = MyAdapter(requireContext(), items, this)
                 binding.recyclerView.adapter?.notifyDataSetChanged()
                 binding.recyclerView.adapter = adapter
             }
@@ -185,4 +194,28 @@ class RadioFragment : Fragment(), OnItemSelectedListener {
     override fun onNothingSelected(parent: AdapterView<*>?) {
         TODO("Not yet implemented")
     }
-}
+
+    override fun onItemClick(url: String) {
+        mediaPlayer.stop()
+        mediaPlayer.reset()
+
+        try {
+            mediaPlayer.setDataSource(url)
+            mediaPlayer.setOnPreparedListener { mp ->
+                mp.setVolume(1.0f, 1.0f)
+                mp.start() // 준비가 완료되면 재생 시작
+                Toast.makeText(context, "음악 플레이중...", Toast.LENGTH_SHORT).show()
+            }
+            mediaPlayer.prepareAsync()
+        } catch (e: IOException) {
+            Log.e("MediaPlayer", "Failed to set data source: ${e.message}")
+            e.printStackTrace()
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        mediaPlayer.release()
+    }
+
+}// RadioFragment...

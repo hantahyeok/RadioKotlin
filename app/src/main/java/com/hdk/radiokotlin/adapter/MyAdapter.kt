@@ -8,14 +8,16 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.hdk.radiokotlin.R
 import com.hdk.radiokotlin.data.RadioStation
 import com.hdk.radiokotlin.databinding.RecyclerviewItemBinding
+import java.io.IOException
 import kotlin.concurrent.thread
 
-class MyAdapter constructor(var context: Context, var items: MutableList<RadioStation>) :
+class MyAdapter constructor(var context: Context, var items: MutableList<RadioStation>, private val itemClickListener: ItemClickListener) :
     RecyclerView.Adapter<MyAdapter.VH>() {
 
     inner class VH constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -40,19 +42,13 @@ class MyAdapter constructor(var context: Context, var items: MutableList<RadioSt
 
 
         holder.binding.recyclerItem.setOnClickListener {
-//
-//            val url = item.url // your URL here
-//            val mediaPlayer: MediaPlayer? = MediaPlayer().apply {
-//                setAudioStreamType(AudioManager.STREAM_MUSIC)
-//                setDataSource(url)
-//                setOnPreparedListener {
-//                    // 준비 완료 후 실행할 작업
-//                    start() // 재생 시작
-//                }
-//                prepareAsync() // 비동기적으로 미디어 준비
-//            }
+            itemClickListener.onItemClick(item.url_resolved)
         }
 
+    }
+
+    interface ItemClickListener {
+        fun onItemClick(url: String)
     }
 
     override fun getItemCount(): Int = items.size
