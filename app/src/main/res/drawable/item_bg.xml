@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@drawable/bg_select" android:state_pressed="true" /> <!-- 클릭 상태 -->
+    <item android:drawable="@drawable/bg_select" android:state_focused="true" /> <!-- 포커스 상태 -->
+    <item android:drawable="@drawable/bg" /> <!-- 기본 상태 -->
+</selector>

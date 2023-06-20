@@ -10,8 +10,10 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemSelectedListener
 import android.widget.ArrayAdapter
+import android.widget.ImageView
 import android.widget.PopupWindow
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import com.google.gson.Gson
 import com.hdk.radiokotlin.adapter.MyAdapter
 import com.hdk.radiokotlin.R
@@ -130,6 +132,7 @@ class RadioFragment : Fragment(), OnItemSelectedListener, MyAdapter.ItemClickLis
 
     private lateinit var mediaPlayer: MediaPlayer
 
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -155,6 +158,7 @@ class RadioFragment : Fragment(), OnItemSelectedListener, MyAdapter.ItemClickLis
     }
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+
         var selectedItem = spList[position]
         var str = selectedItem.substringAfterLast(" ")
 
@@ -196,6 +200,7 @@ class RadioFragment : Fragment(), OnItemSelectedListener, MyAdapter.ItemClickLis
     }
 
     override fun onItemClick(url: String) {
+
         mediaPlayer.stop()
         mediaPlayer.reset()
 

@@ -10,17 +10,19 @@
     >
 <!-- 대리자, 람다 // 지하철 좌표 이동-->
 
-    <ImageView
-        android:id="@+id/iv"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:src="@drawable/item_star"
-        android:layout_gravity="center"
-        android:scaleType="centerCrop"
-        android:layout_margin="16dp"
-        android:foreground="@drawable/bg"
-        android:padding="16dp"
-        />
+
+        <ImageView
+            android:id="@+id/iv"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/item_star"
+            android:layout_gravity="center"
+            android:scaleType="centerCrop"
+            android:layout_margin="16dp"
+            android:padding="16dp"
+            android:foreground="@drawable/bg"
+            />
+
 
     <TextView
         android:id="@+id/tv"
