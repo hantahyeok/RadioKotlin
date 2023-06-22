@@ -23,6 +23,7 @@ import kotlin.concurrent.thread
 class MyAdapter constructor(var context: Context, var items: MutableList<RadioStation>, private val itemClickListener: ItemClickListener) :
     RecyclerView.Adapter<MyAdapter.VH>() {
 
+
     inner class VH constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val binding: RecyclerviewItemBinding = RecyclerviewItemBinding.bind(itemView)
     }
@@ -45,14 +46,15 @@ class MyAdapter constructor(var context: Context, var items: MutableList<RadioSt
 
 
         holder.binding.recyclerItem.setOnClickListener {
-            itemClickListener.onItemClick(item.url_resolved)
+
+            itemClickListener.onItemClick(item.url_resolved, item.favicon, item.name)
 //            holder.binding.iv.foreground = ContextCompat.getDrawable(context, R.drawable.bg_select)
         }
 
     }
 
     interface ItemClickListener {
-        fun onItemClick(url: String)
+        fun onItemClick(url: String, favicon: String, name: String)
     }
 
     override fun getItemCount(): Int = items.size

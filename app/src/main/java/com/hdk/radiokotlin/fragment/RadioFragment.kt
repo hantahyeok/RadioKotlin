@@ -15,6 +15,7 @@ import android.widget.PopupWindow
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.google.gson.Gson
+import com.hdk.radiokotlin.MainActivity
 import com.hdk.radiokotlin.adapter.MyAdapter
 import com.hdk.radiokotlin.R
 import com.hdk.radiokotlin.data.RadioStation
@@ -154,6 +155,8 @@ class RadioFragment : Fragment(), OnItemSelectedListener, MyAdapter.ItemClickLis
         binding.spinner.onItemSelectedListener = this
         binding.spinner.setSelection(57)
 
+//        view.findViewById<>(R.id.animation_view)
+
         return binding.root
     }
 
@@ -199,7 +202,10 @@ class RadioFragment : Fragment(), OnItemSelectedListener, MyAdapter.ItemClickLis
         TODO("Not yet implemented")
     }
 
-    override fun onItemClick(url: String) {
+    override fun onItemClick(url: String, favicon: String, name: String) {
+
+        val mainActivity = activity as MainActivity
+        mainActivity.getMedia(mediaPlayer, favicon, name, url)
 
         mediaPlayer.stop()
         mediaPlayer.reset()
