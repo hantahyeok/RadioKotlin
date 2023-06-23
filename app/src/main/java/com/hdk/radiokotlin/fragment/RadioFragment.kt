@@ -1,7 +1,9 @@
 package com.hdk.radiokotlin.fragment
 
+import android.animation.ValueAnimator
 import android.media.MediaPlayer
 import android.os.Bundle
+import android.provider.MediaStore.Audio.Radio
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -27,6 +29,7 @@ import kotlin.concurrent.thread
 class RadioFragment : Fragment(), OnItemSelectedListener, MyAdapter.ItemClickListener {
 
     private lateinit var binding: FragmentRadioBinding
+    var items = mutableListOf<RadioStation>()
 
     var spList: Array<String> = arrayOf(
         "\uD83C\uDDFA\uD83C\uDDF8 US", // 미국
@@ -175,7 +178,6 @@ class RadioFragment : Fragment(), OnItemSelectedListener, MyAdapter.ItemClickLis
             val stations: Array<RadioStation> =
                 gson.fromJson(jsonText, Array<RadioStation>::class.java)
 
-            var items = mutableListOf<RadioStation>()
             items.clear()
             for (position in stations) {
                 items.add(
@@ -202,26 +204,12 @@ class RadioFragment : Fragment(), OnItemSelectedListener, MyAdapter.ItemClickLis
         TODO("Not yet implemented")
     }
 
-    override fun onItemClick(url: String, favicon: String, name: String) {
+    override fun onItemClick(url: String, favicon: String, name: String, url_resolved: String) {
 
         val mainActivity = activity as MainActivity
-        mainActivity.getMedia(mediaPlayer, favicon, name, url)
+        mainActivity.getMedia(mediaPlayer, favicon, name, url, url_resolved)
 
-        mediaPlayer.stop()
-        mediaPlayer.reset()
 
-        try {
-            mediaPlayer.setDataSource(url)
-            mediaPlayer.setOnPreparedListener { mp ->
-                mp.setVolume(1.0f, 1.0f)
-                mp.start() // 준비가 완료되면 재생 시작
-                Toast.makeText(context, "음악 플레이중...", Toast.LENGTH_SHORT).show()
-            }
-            mediaPlayer.prepareAsync()
-        } catch (e: IOException) {
-            Log.e("MediaPlayer", "Failed to set data source: ${e.message}")
-            e.printStackTrace()
-        }
     }
 
     override fun onDestroyView() {

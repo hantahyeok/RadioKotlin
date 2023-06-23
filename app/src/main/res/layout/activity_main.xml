@@ -72,6 +72,16 @@
             android:layout_marginTop="5dp"
             />
 
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="7dp"
+            android:layout_marginBottom="3dp"
+            android:visibility="gone"
+            />
+
     </RelativeLayout>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView

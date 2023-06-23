@@ -11,7 +11,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Spinner
 import android.widget.Toast
+import com.hdk.radiokotlin.DBHelper
 import com.hdk.radiokotlin.R
+import com.hdk.radiokotlin.data.RadioStation
 import com.hdk.radiokotlin.databinding.FragmentBookMarkBinding
 import com.hdk.radiokotlin.databinding.FragmentRadioBinding
 import java.io.IOException
@@ -20,14 +22,51 @@ class BookMarkFragment : Fragment() {
 
     private lateinit var binding: FragmentBookMarkBinding
 
+    var items = mutableListOf<RadioStation>()
+
+    // DBHelper 객체 선언
+    private lateinit var dbHelper: DBHelper
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentBookMarkBinding.inflate(layoutInflater)
 
-        binding.btn.setOnClickListener {
+        items = loadBookmarks() as MutableList<RadioStation>
 
-        }
+
 
         return binding.root
+    }
+
+    private fun loadBookmarks(): List<RadioStation> {
+        val bookmarks = mutableListOf<RadioStation>()
+        val db = dbHelper.readableDatabase
+        val projection = arrayOf(
+            DBHelper.COLUMN_NAME,
+            DBHelper.COLUMN_FAVICON,
+            DBHelper.COLUMN_URL,
+            DBHelper.COLUMN_URL_RESOLVED
+        )
+        val cursor = db.query(
+            DBHelper.TABLE_NAME,
+            projection,
+            null,
+            null,
+            null,
+            null,
+            null
+        )
+        with(cursor) {
+            while (moveToNext()) {
+                val name = getString(getColumnIndexOrThrow(DBHelper.COLUMN_NAME))
+                val favicon = getString(getColumnIndexOrThrow(DBHelper.COLUMN_FAVICON))
+                val url = getString(getColumnIndexOrThrow(DBHelper.COLUMN_URL))
+                val urlResolved = getString(getColumnIndexOrThrow(DBHelper.COLUMN_URL_RESOLVED))
+                bookmarks.add(RadioStation(name, favicon, url, urlResolved))
+            }
+        }
+        cursor.close()
+        db.close()
+        return bookmarks
     }
 }

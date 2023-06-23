@@ -44,17 +44,17 @@ class MyAdapter constructor(var context: Context, var items: MutableList<RadioSt
             .error(R.drawable.noimage) // 에러 시 대체 이미지 리소스
             .into(holder.binding.iv)
 
-
         holder.binding.recyclerItem.setOnClickListener {
 
-            itemClickListener.onItemClick(item.url_resolved, item.favicon, item.name)
+
+            itemClickListener.onItemClick(item.url_resolved, item.favicon, item.name, item.url_resolved)
 //            holder.binding.iv.foreground = ContextCompat.getDrawable(context, R.drawable.bg_select)
         }
 
     }
 
     interface ItemClickListener {
-        fun onItemClick(url: String, favicon: String, name: String)
+        fun onItemClick(url: String, favicon: String, name: String, url_resolved: String)
     }
 
     override fun getItemCount(): Int = items.size

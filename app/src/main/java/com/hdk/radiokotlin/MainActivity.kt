@@ -2,6 +2,7 @@ package com.hdk.radiokotlin
 
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
+import android.content.ContentValues
 import android.content.pm.PackageManager
 import android.media.AudioFormat
 import android.media.AudioManager
@@ -20,6 +21,7 @@ import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.hdk.radiokotlin.adapter.MyAdapter
+import com.hdk.radiokotlin.data.RadioStation
 import com.hdk.radiokotlin.databinding.ActivityMainBinding
 import com.hdk.radiokotlin.fragment.BookMarkFragment
 import com.hdk.radiokotlin.fragment.PodcastFragment
@@ -28,7 +30,11 @@ import com.hdk.radiokotlin.fragment.SettingFragment
 import java.io.IOException
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(){
+
+
+    // DBHelper 객체 선언
+    private lateinit var dbHelper: DBHelper
 
     private var currentFragment: Fragment? = null
 
@@ -47,9 +53,15 @@ class MainActivity : AppCompatActivity() {
     lateinit var favicon : String
     lateinit var name : String
     lateinit var url : String
+    lateinit var url_resolved : String
+
+    var items = mutableListOf<RadioStation>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // DBHelper 객체 초기화
+        dbHelper = DBHelper(this)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -87,7 +99,14 @@ class MainActivity : AppCompatActivity() {
         bnv_main.selectedItemId = R.id.action_radio
 
         binding.starBtn.setOnClickListener {
+
+//            items.add(RadioStation(name, favicon, url, url_resolved))
+
             if(isStar == false){
+
+                //즐겨찾기 삭제
+                deleteBookmark(url)
+
                 val animator = ValueAnimator.ofFloat(0f, 1f).setDuration(1000)
                 animator.addUpdateListener { animation ->
                     binding.starBtn.setProgress(animation.animatedValue as Float)
@@ -95,6 +114,10 @@ class MainActivity : AppCompatActivity() {
                 animator.start()
                 isStar = true
             }else{
+
+                //즐겨찾기 추가
+                insertBookmark(name, favicon, url, url_resolved)
+
                 val animator = ValueAnimator.ofFloat(1f, 0.1f).setDuration(1000)
                 animator.addUpdateListener { animation ->
                     binding.starBtn.setProgress(animation.animatedValue as Float)
@@ -102,6 +125,7 @@ class MainActivity : AppCompatActivity() {
                 animator.start()
                 isStar = false
             }
+
         }
 
         binding.playBtn.setOnClickListener {
@@ -109,17 +133,24 @@ class MainActivity : AppCompatActivity() {
             if(isPlay == false){
 
                 mediaPlayer.stop()
+                mediaPlayer.reset()
 
-                val animator = ValueAnimator.ofFloat(0f, 0.5f).setDuration(1000)
+                binding.progressBar.visibility = View.INVISIBLE
+
+                val animator = ValueAnimator.ofFloat(0.5f, 1f).setDuration(1000)
                 animator.addUpdateListener { animation ->
                     binding.playBtn.setProgress(animation.animatedValue as Float)
                 }
                 animator.start()
                 isPlay = true
+
             }else{
+
 
                 mediaPlayer.stop()
                 mediaPlayer.reset()
+
+                binding.progressBar.visibility = View.VISIBLE
 
                 try {
                     mediaPlayer.setDataSource(url)
@@ -127,15 +158,17 @@ class MainActivity : AppCompatActivity() {
                         mp.setVolume(1.0f, 1.0f)
                         mp.start() // 준비가 완료되면 재생 시작
                         Toast.makeText(this, "음악 플레이중...", Toast.LENGTH_SHORT).show()
+                        binding.progressBar.visibility = View.INVISIBLE
                     }
                     mediaPlayer.prepareAsync()
                 } catch (e: IOException) {
                     Log.e("MediaPlayer", "Failed to set data source: ${e.message}")
                     e.printStackTrace()
+                    binding.progressBar.visibility = View.INVISIBLE
+
                 }
 
-
-                val animator = ValueAnimator.ofFloat(0.5f, 1f).setDuration(1000)
+                val animator = ValueAnimator.ofFloat(0f, 0.5f).setDuration(1000)
                 animator.addUpdateListener { animation ->
                     binding.playBtn.setProgress(animation.animatedValue as Float)
                 }
@@ -170,7 +203,33 @@ class MainActivity : AppCompatActivity() {
         currentFragment = fragment
     }
 
-    fun getMedia(mediaPlayer: MediaPlayer, favicon: String, name: String, url: String){
+    fun getMedia(mediaPlayer: MediaPlayer, favicon: String, name: String, url: String, url_resolved: String){
+
+        binding.progressBar.visibility = View.VISIBLE
+
+        mediaPlayer.stop()
+        mediaPlayer.reset()
+
+        try {
+            mediaPlayer.setDataSource(url)
+            mediaPlayer.setOnPreparedListener { mp ->
+                mp.setVolume(1.0f, 1.0f)
+                mp.start() // 준비가 완료되면 재생 시작
+                Toast.makeText(this, "음악 플레이중...", Toast.LENGTH_SHORT).show()
+                binding.progressBar.visibility = View.INVISIBLE
+            }
+            mediaPlayer.prepareAsync()
+        } catch (e: IOException) {
+            binding.progressBar.visibility = View.INVISIBLE
+            Log.e("MediaPlayer", "Failed to set data source: ${e.message}")
+            e.printStackTrace()
+        }
+
+        val animator = ValueAnimator.ofFloat(0f, 0.5f).setDuration(1000)
+        animator.addUpdateListener { animation ->
+            binding.playBtn.setProgress(animation.animatedValue as Float)
+        }
+        animator.start()
 
         binding.linear.visibility = View.VISIBLE
 
@@ -178,6 +237,8 @@ class MainActivity : AppCompatActivity() {
         this.favicon = favicon
         this.name = name
         this.url = url
+        this.items = items
+        this.url_resolved = url_resolved
 
         Glide.with(this)
             .load(favicon)
@@ -187,5 +248,24 @@ class MainActivity : AppCompatActivity() {
         binding.tv.text = name
     }
 
+    private fun insertBookmark(name: String, favicon: String, url: String, url_resolved: String) {
+        // 데이터베이스에 데이터 추가
+        val db = dbHelper.writableDatabase
+        val values = ContentValues().apply {
+            put(DBHelper.COLUMN_NAME, name)
+            put(DBHelper.COLUMN_FAVICON, favicon)
+            put(DBHelper.COLUMN_URL, url)
+            put(DBHelper.COLUMN_URL_RESOLVED, url_resolved)
+        }
+        db.insert(DBHelper.TABLE_NAME, null, values)
+        db.close()
+    }
+
+    private fun deleteBookmark(url: String) {
+        // 데이터베이스에서 해당 URL의 데이터 삭제
+        val db = dbHelper.writableDatabase
+        db.delete(DBHelper.TABLE_NAME, "${DBHelper.COLUMN_URL} = ?", arrayOf(url))
+        db.close()
+    }
 
 }
