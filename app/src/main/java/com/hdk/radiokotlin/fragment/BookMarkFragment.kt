@@ -12,13 +12,15 @@ import android.view.ViewGroup
 import android.widget.Spinner
 import android.widget.Toast
 import com.hdk.radiokotlin.DBHelper
+import com.hdk.radiokotlin.MainActivity
 import com.hdk.radiokotlin.R
+import com.hdk.radiokotlin.adapter.MyAdapter
 import com.hdk.radiokotlin.data.RadioStation
 import com.hdk.radiokotlin.databinding.FragmentBookMarkBinding
 import com.hdk.radiokotlin.databinding.FragmentRadioBinding
 import java.io.IOException
 
-class BookMarkFragment : Fragment() {
+class BookMarkFragment : Fragment(), MyAdapter.ItemClickListener {
 
     private lateinit var binding: FragmentBookMarkBinding
 
@@ -31,9 +33,15 @@ class BookMarkFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentBookMarkBinding.inflate(layoutInflater)
 
-        items = loadBookmarks() as MutableList<RadioStation>
+        // DBHelper 객체 초기화
+        dbHelper = DBHelper(requireContext())
 
+        items = loadBookmarks() as MutableList<RadioStation>/**/
 
+        var adapter = MyAdapter(requireContext(), items, this)
+        binding.recyclerView.adapter?.notifyDataSetChanged()
+        adapter.notifyDataSetChanged()
+        binding.recyclerView.adapter = adapter
 
         return binding.root
     }
@@ -68,5 +76,10 @@ class BookMarkFragment : Fragment() {
         cursor.close()
         db.close()
         return bookmarks
+    }
+
+    override fun onItemClick(url: String, favicon: String, name: String, url_resolved: String) {
+        val mainActivity = activity as MainActivity
+        mainActivity.getMedia(favicon, name, url, url_resolved)
     }
 }

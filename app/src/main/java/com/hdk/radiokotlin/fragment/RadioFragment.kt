@@ -207,8 +207,7 @@ class RadioFragment : Fragment(), OnItemSelectedListener, MyAdapter.ItemClickLis
     override fun onItemClick(url: String, favicon: String, name: String, url_resolved: String) {
 
         val mainActivity = activity as MainActivity
-        mainActivity.getMedia(mediaPlayer, favicon, name, url, url_resolved)
-
+        mainActivity.getMedia(favicon, name, url, url_resolved)
 
     }
 

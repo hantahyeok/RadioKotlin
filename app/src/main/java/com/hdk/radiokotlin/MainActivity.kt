@@ -100,7 +100,7 @@ class MainActivity : AppCompatActivity(){
 
         binding.starBtn.setOnClickListener {
 
-//            items.add(RadioStation(name, favicon, url, url_resolved))
+            items.add(RadioStation(name, favicon, url, url_resolved))
 
             if(isStar == false){
 
@@ -203,7 +203,7 @@ class MainActivity : AppCompatActivity(){
         currentFragment = fragment
     }
 
-    fun getMedia(mediaPlayer: MediaPlayer, favicon: String, name: String, url: String, url_resolved: String){
+    fun getMedia(favicon: String, name: String, url: String, url_resolved: String){
 
         binding.progressBar.visibility = View.VISIBLE
 
