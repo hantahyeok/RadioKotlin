@@ -85,10 +85,10 @@ class MainActivity : AppCompatActivity(){
                         changeFragment(bookMarkFragment)
                         // Respond to navigation item 2 click
                     }
-                    R.id.action_podcast -> {
-                        changeFragment(podcastFragment)
-                        // Respond to navigation item 3 click
-                    }
+//                    R.id.action_podcast -> {
+//                        changeFragment(podcastFragment)
+//                        // Respond to navigation item 3 click
+//                    }
                     R.id.action_setup -> {
                         changeFragment(settingFragment)
                         // Respond to navigation item 4 click

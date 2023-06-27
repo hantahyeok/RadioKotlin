@@ -28,6 +28,7 @@ class BookMarkFragment : Fragment(), MyAdapter.ItemClickListener {
 
     // DBHelper 객체 선언
     private lateinit var dbHelper: DBHelper
+    private lateinit var adapter: MyAdapter
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -36,46 +37,12 @@ class BookMarkFragment : Fragment(), MyAdapter.ItemClickListener {
         // DBHelper 객체 초기화
         dbHelper = DBHelper(requireContext())
 
-        items = loadBookmarks() as MutableList<RadioStation>/**/
-
-        var adapter = MyAdapter(requireContext(), items, this)
+        adapter = MyAdapter(requireContext(), items, this)
         binding.recyclerView.adapter?.notifyDataSetChanged()
         adapter.notifyDataSetChanged()
         binding.recyclerView.adapter = adapter
 
         return binding.root
-    }
-
-    private fun loadBookmarks(): List<RadioStation> {
-        val bookmarks = mutableListOf<RadioStation>()
-        val db = dbHelper.readableDatabase
-        val projection = arrayOf(
-            DBHelper.COLUMN_NAME,
-            DBHelper.COLUMN_FAVICON,
-            DBHelper.COLUMN_URL,
-            DBHelper.COLUMN_URL_RESOLVED
-        )
-        val cursor = db.query(
-            DBHelper.TABLE_NAME,
-            projection,
-            null,
-            null,
-            null,
-            null,
-            null
-        )
-        with(cursor) {
-            while (moveToNext()) {
-                val name = getString(getColumnIndexOrThrow(DBHelper.COLUMN_NAME))
-                val favicon = getString(getColumnIndexOrThrow(DBHelper.COLUMN_FAVICON))
-                val url = getString(getColumnIndexOrThrow(DBHelper.COLUMN_URL))
-                val urlResolved = getString(getColumnIndexOrThrow(DBHelper.COLUMN_URL_RESOLVED))
-                bookmarks.add(RadioStation(name, favicon, url, urlResolved))
-            }
-        }
-        cursor.close()
-        db.close()
-        return bookmarks
     }
 
     override fun onItemClick(url: String, favicon: String, name: String, url_resolved: String) {
