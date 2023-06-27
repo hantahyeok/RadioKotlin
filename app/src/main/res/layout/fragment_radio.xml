@@ -36,6 +36,9 @@
         android:layout_below="@id/toolbar"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:spanCount="3"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:clickable="true"
         />
 
 </RelativeLayout>

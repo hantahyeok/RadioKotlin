@@ -20,7 +20,7 @@
             android:scaleType="centerCrop"
             android:layout_margin="16dp"
             android:padding="16dp"
-            android:foreground="@drawable/bg"
+            android:background="@drawable/bg"
             />
 
 

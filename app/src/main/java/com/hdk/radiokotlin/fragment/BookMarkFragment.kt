@@ -14,6 +14,7 @@ import android.widget.Toast
 import com.hdk.radiokotlin.DBHelper
 import com.hdk.radiokotlin.MainActivity
 import com.hdk.radiokotlin.R
+import com.hdk.radiokotlin.SharedPreferencesUtil
 import com.hdk.radiokotlin.adapter.MyAdapter
 import com.hdk.radiokotlin.data.RadioStation
 import com.hdk.radiokotlin.databinding.FragmentBookMarkBinding
@@ -37,9 +38,13 @@ class BookMarkFragment : Fragment(), MyAdapter.ItemClickListener {
         // DBHelper 객체 초기화
         dbHelper = DBHelper(requireContext())
 
+        val savedData = SharedPreferencesUtil.loadData(requireContext())
+
+        if (savedData != null) {
+//            items.add(RadioStation(savedData.favicon, savedData.name, savedData.url, savedData.urlResolved))
+        }
+
         adapter = MyAdapter(requireContext(), items, this)
-        binding.recyclerView.adapter?.notifyDataSetChanged()
-        adapter.notifyDataSetChanged()
         binding.recyclerView.adapter = adapter
 
         return binding.root

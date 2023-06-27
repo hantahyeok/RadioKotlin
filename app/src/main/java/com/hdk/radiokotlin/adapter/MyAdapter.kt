@@ -13,6 +13,7 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.hdk.radiokotlin.MainActivity
 import com.hdk.radiokotlin.R
 import com.hdk.radiokotlin.data.RadioStation
 import com.hdk.radiokotlin.databinding.RecyclerviewItemBinding
@@ -23,6 +24,7 @@ import kotlin.concurrent.thread
 class MyAdapter constructor(var context: Context, var items: MutableList<RadioStation>, private val itemClickListener: ItemClickListener) :
     RecyclerView.Adapter<MyAdapter.VH>() {
 
+    var selectPos = -1
 
     inner class VH constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val binding: RecyclerviewItemBinding = RecyclerviewItemBinding.bind(itemView)
@@ -44,9 +46,19 @@ class MyAdapter constructor(var context: Context, var items: MutableList<RadioSt
             .error(R.drawable.noimage) // 에러 시 대체 이미지 리소스
             .into(holder.binding.iv)
 
-//        holder.
+        if(selectPos == position) {
+            holder.binding.iv.setBackgroundResource(R.drawable.bg_select)
+        } else {
+            holder.binding.iv.setBackgroundResource(R.drawable.bg)
+        }
 
         holder.binding.recyclerItem.setOnClickListener {
+
+            var beforePos = selectPos
+            selectPos = position
+
+            notifyItemChanged(beforePos)
+            notifyItemChanged(selectPos)
 
             itemClickListener.onItemClick(item.url_resolved, item.favicon, item.name, item.url_resolved)
 //            holder.binding.iv.foreground = ContextCompat.getDrawable(context, R.drawable.bg_select)

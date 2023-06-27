@@ -104,9 +104,6 @@ class MainActivity : AppCompatActivity(){
 
             if(isStar == false){
 
-                //즐겨찾기 삭제
-                deleteBookmark(url)
-
                 val animator = ValueAnimator.ofFloat(0f, 1f).setDuration(1000)
                 animator.addUpdateListener { animation ->
                     binding.starBtn.setProgress(animation.animatedValue as Float)
@@ -114,9 +111,9 @@ class MainActivity : AppCompatActivity(){
                 animator.start()
                 isStar = true
             }else{
-
-                //즐겨찾기 추가
-                insertBookmark(name, favicon, url, url_resolved)
+//
+//                //즐겨찾기 추가
+//                SharedPreferencesUtil.saveData(this, ItemData.add)
 
                 val animator = ValueAnimator.ofFloat(1f, 0.1f).setDuration(1000)
                 animator.addUpdateListener { animation ->
@@ -246,26 +243,6 @@ class MainActivity : AppCompatActivity(){
             .error(R.drawable.noimage) // 에러 시 대체 이미지 리소스
             .into(binding.iv)
         binding.tv.text = name
-    }
-
-    private fun insertBookmark(name: String, favicon: String, url: String, url_resolved: String) {
-        // 데이터베이스에 데이터 추가
-        val db = dbHelper.writableDatabase
-        val values = ContentValues().apply {
-            put(DBHelper.COLUMN_NAME, name)
-            put(DBHelper.COLUMN_FAVICON, favicon)
-            put(DBHelper.COLUMN_URL, url)
-            put(DBHelper.COLUMN_URL_RESOLVED, url_resolved)
-        }
-        db.insert(DBHelper.TABLE_NAME, null, values)
-        db.close()
-    }
-
-    private fun deleteBookmark(url: String) {
-        // 데이터베이스에서 해당 URL의 데이터 삭제
-        val db = dbHelper.writableDatabase
-        db.delete(DBHelper.TABLE_NAME, "${DBHelper.COLUMN_URL} = ?", arrayOf(url))
-        db.close()
     }
 
 }
