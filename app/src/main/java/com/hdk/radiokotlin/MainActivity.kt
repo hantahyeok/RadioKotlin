@@ -3,6 +3,7 @@ package com.hdk.radiokotlin
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.content.ContentValues
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.media.AudioFormat
 import android.media.AudioManager
@@ -127,6 +128,7 @@ class MainActivity : AppCompatActivity(){
 
         binding.playBtn.setOnClickListener {
 
+//            stop()
             if(isPlay == false){
 
                 mediaPlayer.stop()
@@ -144,10 +146,17 @@ class MainActivity : AppCompatActivity(){
             }else{
 
 
+                play()
+
                 mediaPlayer.stop()
                 mediaPlayer.reset()
 
                 binding.progressBar.visibility = View.VISIBLE
+
+
+                val intent = Intent(this, MusicService::class.java)
+                intent.putExtra("url_resolved", url_resolved)
+                startService(intent)
 
                 try {
                     mediaPlayer.setDataSource(url)
@@ -177,6 +186,10 @@ class MainActivity : AppCompatActivity(){
 
     }// onCreate...
 
+    fun play(){
+
+    }
+
     private fun changeFragment(fragment: Fragment) {
 //        supportFragmentManager
 //            .beginTransaction()
@@ -200,8 +213,8 @@ class MainActivity : AppCompatActivity(){
         currentFragment = fragment
     }
 
-    fun getMedia(favicon: String, name: String, url: String, url_resolved: String){
 
+    fun getMedia(favicon: String, name: String, url: String, url_resolved: String){
         binding.progressBar.visibility = View.VISIBLE
 
         mediaPlayer.stop()
