@@ -146,33 +146,33 @@ class MainActivity : AppCompatActivity(){
             }else{
 
 
-                play()
+//                play()
 
                 mediaPlayer.stop()
                 mediaPlayer.reset()
 
                 binding.progressBar.visibility = View.VISIBLE
 
+//
+//                val intent = Intent(this, MusicService::class.java)
+//                intent.putExtra("url", url)
+//                startService(intent)
 
-                val intent = Intent(this, MusicService::class.java)
-                intent.putExtra("url_resolved", url_resolved)
-                startService(intent)
-
-                try {
-                    mediaPlayer.setDataSource(url)
-                    mediaPlayer.setOnPreparedListener { mp ->
-                        mp.setVolume(1.0f, 1.0f)
-                        mp.start() // 준비가 완료되면 재생 시작
-                        Toast.makeText(this, "음악 플레이중...", Toast.LENGTH_SHORT).show()
-                        binding.progressBar.visibility = View.INVISIBLE
-                    }
-                    mediaPlayer.prepareAsync()
-                } catch (e: IOException) {
-                    Log.e("MediaPlayer", "Failed to set data source: ${e.message}")
-                    e.printStackTrace()
-                    binding.progressBar.visibility = View.INVISIBLE
-
-                }
+//                try {
+//                    mediaPlayer.setDataSource(url)
+//                    mediaPlayer.setOnPreparedListener { mp ->
+//                        mp.setVolume(1.0f, 1.0f)
+//                        mp.start() // 준비가 완료되면 재생 시작
+//                        Toast.makeText(this, "음악 플레이중...", Toast.LENGTH_SHORT).show()
+//                        binding.progressBar.visibility = View.INVISIBLE
+//                    }
+//                    mediaPlayer.prepareAsync()
+//                } catch (e: IOException) {
+//                    Log.e("MediaPlayer", "Failed to set data source: ${e.message}")
+//                    e.printStackTrace()
+//                    binding.progressBar.visibility = View.INVISIBLE
+//
+//                }
 
                 val animator = ValueAnimator.ofFloat(0f, 0.5f).setDuration(1000)
                 animator.addUpdateListener { animation ->
@@ -234,6 +234,11 @@ class MainActivity : AppCompatActivity(){
             Log.e("MediaPlayer", "Failed to set data source: ${e.message}")
             e.printStackTrace()
         }
+
+//        val intent = Intent(this, MusicService::class.java)
+//        intent.putExtra("url", url)
+//        startService(intent)
+
 
         val animator = ValueAnimator.ofFloat(0f, 0.5f).setDuration(1000)
         animator.addUpdateListener { animation ->

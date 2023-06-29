@@ -1,6 +1,7 @@
 package com.hdk.radiokotlin.adapter
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.PorterDuff
 import android.media.AudioManager
 import android.media.MediaPlayer
@@ -14,6 +15,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.hdk.radiokotlin.MainActivity
+import com.hdk.radiokotlin.MusicService
 import com.hdk.radiokotlin.R
 import com.hdk.radiokotlin.data.RadioStation
 import com.hdk.radiokotlin.databinding.RecyclerviewItemBinding
@@ -60,8 +62,8 @@ class MyAdapter constructor(var context: Context, var items: MutableList<RadioSt
             notifyItemChanged(beforePos)
             notifyItemChanged(selectPos)
 
+
             itemClickListener.onItemClick(item.url_resolved, item.favicon, item.name, item.url_resolved)
-//            holder.binding.iv.foreground = ContextCompat.getDrawable(context, R.drawable.bg_select)
         }
 
     }
