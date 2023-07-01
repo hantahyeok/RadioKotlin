@@ -20,7 +20,8 @@ class MusicService : Service() {
         Log.e("test", "testtttt")
         Toast.makeText(this, "Heolo?", Toast.LENGTH_SHORT).show()
 
-        return START_STICKY
+
+        return START_REDELIVER_INTENT
     }
 
     override fun onDestroy() {

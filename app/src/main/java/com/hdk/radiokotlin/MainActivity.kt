@@ -129,7 +129,7 @@ class MainActivity : AppCompatActivity(){
         binding.playBtn.setOnClickListener {
 
 //            stop()
-            if(isPlay == false){
+            if(isPlay == false){ // stop..
 
                 mediaPlayer.stop()
                 mediaPlayer.reset()
@@ -143,8 +143,7 @@ class MainActivity : AppCompatActivity(){
                 animator.start()
                 isPlay = true
 
-            }else{
-
+            }else{ // play..
 
 //                play()
 
@@ -153,10 +152,10 @@ class MainActivity : AppCompatActivity(){
 
                 binding.progressBar.visibility = View.VISIBLE
 
-//
-//                val intent = Intent(this, MusicService::class.java)
-//                intent.putExtra("url", url)
-//                startService(intent)
+
+                val intent = Intent(this, MusicService::class.java)
+                intent.putExtra("url", url)
+                startService(intent)
 
 //                try {
 //                    mediaPlayer.setDataSource(url)
