@@ -23,9 +23,7 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
 
-        <service android:name=".MusicService"
-            android:enabled="false"
-            android:exported="false"/>
+        <service android:name=".MusicService"/>
 
         <activity
             android:name=".MainActivity"

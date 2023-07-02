@@ -3,6 +3,7 @@ package com.hdk.radiokotlin
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.content.ContentValues
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.media.AudioFormat
@@ -31,7 +32,7 @@ import com.hdk.radiokotlin.fragment.SettingFragment
 import java.io.IOException
 
 
-class MainActivity : AppCompatActivity(){
+class MainActivity : AppCompatActivity() {
 
 
     // DBHelper 객체 선언
@@ -105,16 +106,20 @@ class MainActivity : AppCompatActivity(){
 
             if(isStar == false){
 
+                // 즐겨찾기 삭제
+//                delete()
+
                 val animator = ValueAnimator.ofFloat(0f, 1f).setDuration(1000)
                 animator.addUpdateListener { animation ->
                     binding.starBtn.setProgress(animation.animatedValue as Float)
                 }
                 animator.start()
                 isStar = true
+
             }else{
 //
 //                //즐겨찾기 추가
-//                SharedPreferencesUtil.saveData(this, ItemData.add)
+//                save()
 
                 val animator = ValueAnimator.ofFloat(1f, 0.1f).setDuration(1000)
                 animator.addUpdateListener { animation ->
@@ -122,9 +127,11 @@ class MainActivity : AppCompatActivity(){
                 }
                 animator.start()
                 isStar = false
+
             }
 
         }
+
 
         binding.playBtn.setOnClickListener {
 
@@ -145,33 +152,31 @@ class MainActivity : AppCompatActivity(){
 
             }else{ // play..
 
-//                play()
-
                 mediaPlayer.stop()
                 mediaPlayer.reset()
 
                 binding.progressBar.visibility = View.VISIBLE
 
 
-                val intent = Intent(this, MusicService::class.java)
-                intent.putExtra("url", url)
-                startService(intent)
+//                val intent : Intent = Intent(this, MusicService::class.java)
+//                intent.putExtra("url", url)
+//                startService(intent)
 
-//                try {
-//                    mediaPlayer.setDataSource(url)
-//                    mediaPlayer.setOnPreparedListener { mp ->
-//                        mp.setVolume(1.0f, 1.0f)
-//                        mp.start() // 준비가 완료되면 재생 시작
-//                        Toast.makeText(this, "음악 플레이중...", Toast.LENGTH_SHORT).show()
-//                        binding.progressBar.visibility = View.INVISIBLE
-//                    }
-//                    mediaPlayer.prepareAsync()
-//                } catch (e: IOException) {
-//                    Log.e("MediaPlayer", "Failed to set data source: ${e.message}")
-//                    e.printStackTrace()
-//                    binding.progressBar.visibility = View.INVISIBLE
-//
-//                }
+                try {
+                    mediaPlayer.setDataSource(url)
+                    mediaPlayer.setOnPreparedListener { mp ->
+                        mp.setVolume(1.0f, 1.0f)
+                        mp.start() // 준비가 완료되면 재생 시작
+                        Toast.makeText(this, "음악 플레이중...", Toast.LENGTH_SHORT).show()
+                        binding.progressBar.visibility = View.INVISIBLE
+                    }
+                    mediaPlayer.prepareAsync()
+                } catch (e: IOException) {
+                    Log.e("MediaPlayer", "Failed to set data source: ${e.message}")
+                    e.printStackTrace()
+                    binding.progressBar.visibility = View.INVISIBLE
+
+                }
 
                 val animator = ValueAnimator.ofFloat(0f, 0.5f).setDuration(1000)
                 animator.addUpdateListener { animation ->
@@ -185,11 +190,17 @@ class MainActivity : AppCompatActivity(){
 
     }// onCreate...
 
-    fun play(){
+    fun save(){
+//        val sharedPreferences = applicationContext.getSharedPreferences("MyPreferences", Context.MODE_PRIVATE)
+//        val editor = sharedPreferences.edit()
+    }
+
+    fun delete(){
 
     }
 
     private fun changeFragment(fragment: Fragment) {
+
 //        supportFragmentManager
 //            .beginTransaction()
 //            .replace(R.id.frame_layout, fragment)

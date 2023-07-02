@@ -11,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -62,16 +63,25 @@ class MyAdapter constructor(var context: Context, var items: MutableList<RadioSt
             notifyItemChanged(beforePos)
             notifyItemChanged(selectPos)
 
-
             itemClickListener.onItemClick(item.url_resolved, item.favicon, item.name, item.url_resolved)
+
+            // for Service...
+//            val intent : Intent = Intent(context, MusicService::class.java)
+//            intent.putExtra("url", item.url)
+//            holder.itemView.context.startService(intent)
+
         }
 
+
     }
+
+
 
     interface ItemClickListener {
         fun onItemClick(url: String, favicon: String, name: String, url_resolved: String)
     }
 
     override fun getItemCount(): Int = items.size
+
 
 }

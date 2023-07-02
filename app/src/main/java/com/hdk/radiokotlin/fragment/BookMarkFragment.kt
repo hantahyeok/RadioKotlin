@@ -3,6 +3,7 @@ package com.hdk.radiokotlin.fragment
 import android.annotation.SuppressLint
 import android.media.AudioManager
 import android.media.MediaPlayer
+import android.opengl.Visibility
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -28,20 +29,26 @@ class BookMarkFragment : Fragment(), MyAdapter.ItemClickListener {
     var items = mutableListOf<RadioStation>()
 
     // DBHelper 객체 선언
-    private lateinit var dbHelper: DBHelper
+//    private lateinit var dbHelper: DBHelper
     private lateinit var adapter: MyAdapter
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentBookMarkBinding.inflate(layoutInflater)
 
-        // DBHelper 객체 초기화
-        dbHelper = DBHelper(requireContext())
+//        // DBHelper 객체 초기화
+//        dbHelper = DBHelper(requireContext())
+//
+//        val savedData = SharedPreferencesUtil.loadData(requireContext())
+//
+//        if (savedData != null) {
+////            items.add(RadioStation(savedData.favicon, savedData.name, savedData.url, savedData.urlResolved))
+//        }
 
-        val savedData = SharedPreferencesUtil.loadData(requireContext())
+        items.add(RadioStation(url = "test", favicon = "tset", name = "test", url_resolved = "test"))
 
-        if (savedData != null) {
-//            items.add(RadioStation(savedData.favicon, savedData.name, savedData.url, savedData.urlResolved))
+        if(items.isNotEmpty()){
+            binding.tv.visibility = View.INVISIBLE
         }
 
         adapter = MyAdapter(requireContext(), items, this)
@@ -53,5 +60,6 @@ class BookMarkFragment : Fragment(), MyAdapter.ItemClickListener {
     override fun onItemClick(url: String, favicon: String, name: String, url_resolved: String) {
         val mainActivity = activity as MainActivity
         mainActivity.getMedia(favicon, name, url, url_resolved)
+        Toast.makeText(requireContext(), "Hello", Toast.LENGTH_SHORT).show()
     }
 }

@@ -11,11 +11,25 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
         android:background="?attr/colorPrimary"
         android:minHeight="?attr/actionBarSize"
-        android:theme="?attr/actionBarTheme"
-        android:layout_alignParentTop="true"
-        >
+        android:theme="?attr/actionBarTheme">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/item_radio"
+            android:layout_marginRight="8dp"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="라디오"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            />
 
         <Spinner
             android:id="@+id/spinner"
@@ -23,8 +37,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="end"
             android:dropDownWidth="100dp"
-            android:spinnerMode="dropdown"
-            />
+            android:spinnerMode="dropdown" />
 
     </androidx.appcompat.widget.Toolbar>
 
@@ -34,11 +47,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/toolbar"
-        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-        app:spanCount="3"
+        android:clickable="true"
         android:focusable="true"
         android:focusableInTouchMode="true"
-        android:clickable="true"
-        />
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:spanCount="3" />
 
 </RelativeLayout>

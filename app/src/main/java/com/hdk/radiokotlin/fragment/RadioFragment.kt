@@ -1,6 +1,7 @@
 package com.hdk.radiokotlin.fragment
 
 import android.animation.ValueAnimator
+import android.content.Intent
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.provider.MediaStore.Audio.Radio
@@ -18,6 +19,7 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.google.gson.Gson
 import com.hdk.radiokotlin.MainActivity
+import com.hdk.radiokotlin.MusicService
 import com.hdk.radiokotlin.adapter.MyAdapter
 import com.hdk.radiokotlin.R
 import com.hdk.radiokotlin.data.RadioStation
@@ -208,6 +210,7 @@ class RadioFragment : Fragment(), OnItemSelectedListener, MyAdapter.ItemClickLis
 
         val mainActivity = activity as MainActivity
         mainActivity.getMedia(favicon, name, url, url_resolved)
+
 
     }
 
