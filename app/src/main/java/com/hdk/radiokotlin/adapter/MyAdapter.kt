@@ -65,11 +65,6 @@ class MyAdapter constructor(var context: Context, var items: MutableList<RadioSt
 
             itemClickListener.onItemClick(item.url_resolved, item.favicon, item.name, item.url_resolved)
 
-            // for Service...
-//            val intent : Intent = Intent(context, MusicService::class.java)
-//            intent.putExtra("url", item.url)
-//            holder.itemView.context.startService(intent)
-
         }
 
 

@@ -5,11 +5,14 @@
 <!--    인터넷 권한-->
     <uses-permission android:name="android.permission.INTERNET"/>
 
+
 <!--    Foreground Service-->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
 
 <!--    Wake Lock 권한 - 플레이어 애플리케이션에서 화면이 어두워지는 것이나 프로세서의 절전 모드를 방지해야 한다면-->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
         android:allowBackup="true"

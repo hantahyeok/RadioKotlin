@@ -2,6 +2,8 @@ package com.hdk.radiokotlin
 
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.BroadcastReceiver
 import android.content.ComponentName
 import android.content.ContentValues
@@ -10,19 +12,24 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.content.ServiceConnection
 import android.content.pm.PackageManager
+import android.database.sqlite.SQLiteDatabase
 import android.media.AudioFormat
 import android.media.AudioManager
 import android.media.AudioTrack
 import android.media.MediaPlayer
+import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
 import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.FrameLayout
+import android.widget.RemoteViews
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
@@ -38,12 +45,13 @@ import com.hdk.radiokotlin.fragment.SettingFragment
 import java.io.IOException
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), MusicService.Play {
 
     private var isServiceRunning: Boolean = false
 
     // DBHelper 객체 선언
-    private lateinit var dbHelper: DBHelper
+    lateinit var dbHelper: DBHelper
+    lateinit var database : SQLiteDatabase
 
     private var currentFragment: Fragment? = null
 
@@ -70,10 +78,12 @@ class MainActivity : AppCompatActivity() {
     private var isBound = false
     private var musicService: MusicService? = null
 
+
     private val connection = object : ServiceConnection {
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
             val binder = service as MusicService.MusicBinder
             musicService = binder.getService()
+            musicService?.setPlayListener(this@MainActivity) // playListener 설정
             isBound = true
         }
 
@@ -84,16 +94,32 @@ class MainActivity : AppCompatActivity() {
     }
 
 
+
+    @SuppressLint("MissingPermission", "RemoteViewLayout")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val filter = IntentFilter("com.hdk.radiokotlin.MUSIC_STATUS")
+//        //notification 생성...
+//        showNotification()
+//        val notificationLayout = RemoteViews(packageName, R.layout.custom_notification) // we get our lauout
+//        var builder = NotificationCompat.Builder(this, CHANNEL_ID)
+//            .setContentTitle("your Title")
+//            .setSmallIcon(R.drawable.item_radio)
+//            .setStyle(NotificationCompat.DecoratedCustomViewStyle())
+//            .setCustomContentView(notificationLayout)
+//            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+//
+//        binding.playBtn.setOnClickListener {
+//            with(NotificationManagerCompat.from(this)){
+//                notify(0, builder.build())
+//            }
+//        }
 
         val intent = Intent(this, MusicService::class.java)
         bindService(intent, connection, Context.BIND_AUTO_CREATE)
 
-        // DBHelper 객체 초기화
-        dbHelper = DBHelper(this)
+        dbHelper = DBHelper(this, "newdb.db", null, 1)
+        database = dbHelper.writableDatabase
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         binding2 = FragmentRadioBinding.inflate(layoutInflater)
@@ -187,7 +213,7 @@ class MainActivity : AppCompatActivity() {
 
 
                 binding.progressBar.visibility = View.VISIBLE
-                musicService?.startMusic(url)
+                musicService?.startMusic(url, favicon, name)
 
                 val animator = ValueAnimator.ofFloat(0f, 0.5f).setDuration(1000)
                 animator.addUpdateListener { animation ->
@@ -236,13 +262,31 @@ class MainActivity : AppCompatActivity() {
     }
 
 
+    private  var CHANNEL_ID = "Your_Channel_ID"
+
+    @SuppressLint("RemoteViewLayout")
+    private fun showNotification() {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            val name = "App Notification"
+            val descriptionText = "This is your notificationdescription"
+            val importnace : Int = NotificationManager.IMPORTANCE_DEFAULT
+            val channel : NotificationChannel = NotificationChannel(CHANNEL_ID, name, importnace).apply {
+                description = descriptionText
+            }
+            val notificationManager: NotificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
+        }
+    }
+
+
+    @SuppressLint("RemoteViewLayout", "MissingPermission")
     fun getMedia(favicon: String, name: String, url: String, url_resolved: String) {
         binding.progressBar.visibility = View.VISIBLE
 
-        mediaPlayer.stop()
-        mediaPlayer.reset()
+        musicService?.stopMusic()
+        musicService?.startMusic(url, favicon, name)
 
-        musicService?.startMusic(url)
+
 
         val animator = ValueAnimator.ofFloat(0f, 0.5f).setDuration(1000)
         animator.addUpdateListener { animation ->
@@ -271,6 +315,10 @@ class MainActivity : AppCompatActivity() {
         super.onDestroy()
         // 서비스와 언바인드
         unbindService(connection)
+    }
+
+    override fun InvisibleProgress() {
+        binding.progressBar.visibility = View.INVISIBLE
     }
 
 
