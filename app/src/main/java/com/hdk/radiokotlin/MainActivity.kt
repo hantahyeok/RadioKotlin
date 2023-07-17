@@ -43,6 +43,7 @@ import com.hdk.radiokotlin.fragment.PodcastFragment
 import com.hdk.radiokotlin.fragment.RadioFragment
 import com.hdk.radiokotlin.fragment.SettingFragment
 import java.io.IOException
+import java.time.LocalDateTime
 
 
 class MainActivity : AppCompatActivity(), MusicService.Play {
@@ -179,6 +180,10 @@ class MainActivity : AppCompatActivity(), MusicService.Play {
 //
 //                //즐겨찾기 추가
 //                save()
+                var db = DatabaseHelper(this)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    db.insertInfo(name, url, url_resolved, favicon, LocalDateTime.now().toString())
+                }
 
                 val animator = ValueAnimator.ofFloat(1f, 0.1f).setDuration(1000)
                 animator.addUpdateListener { animation ->
