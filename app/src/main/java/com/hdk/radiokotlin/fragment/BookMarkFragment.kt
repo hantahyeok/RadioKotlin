@@ -36,16 +36,7 @@ class BookMarkFragment : Fragment(), MyAdapter.ItemClickListener {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentBookMarkBinding.inflate(layoutInflater)
 
-//        // DBHelper 객체 초기화
-//        dbHelper = DBHelper(requireContext())
-//
-//        val savedData = SharedPreferencesUtil.loadData(requireContext())
-//
-//        if (savedData != null) {
-////            items.add(RadioStation(savedData.favicon, savedData.name, savedData.url, savedData.urlResolved))
-//        }
-
-        items.add(RadioStation(url = "test", favicon = "tset", name = "test", url_resolved = "test"))
+        items.add(RadioStation(name = "d", favicon = "d", url = "fdf", url_resolved = "fd"))
 
         if(items.isNotEmpty()){
             binding.tv.visibility = View.INVISIBLE

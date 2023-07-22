@@ -210,8 +210,7 @@ class RadioFragment : Fragment(), OnItemSelectedListener, MyAdapter.ItemClickLis
 
         val mainActivity = activity as MainActivity
         mainActivity.getMedia(favicon, name, url, url_resolved)
-
-
+//        MainActivity().getMedia(favicon, name, url, url_resolved)
     }
 
     override fun onDestroyView() {

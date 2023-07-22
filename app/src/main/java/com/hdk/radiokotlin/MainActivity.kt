@@ -44,11 +44,15 @@ import com.hdk.radiokotlin.fragment.RadioFragment
 import com.hdk.radiokotlin.fragment.SettingFragment
 import java.io.IOException
 import java.time.LocalDateTime
+import kotlin.math.log
 
 
 class MainActivity : AppCompatActivity(), MusicService.Play {
 
     private var isServiceRunning: Boolean = false
+
+    var db = DatabaseHelper(this)
+    lateinit var all : String
 
     // DBHelper 객체 선언
     lateinit var dbHelper: DBHelper
@@ -100,21 +104,8 @@ class MainActivity : AppCompatActivity(), MusicService.Play {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-//        //notification 생성...
-//        showNotification()
-//        val notificationLayout = RemoteViews(packageName, R.layout.custom_notification) // we get our lauout
-//        var builder = NotificationCompat.Builder(this, CHANNEL_ID)
-//            .setContentTitle("your Title")
-//            .setSmallIcon(R.drawable.item_radio)
-//            .setStyle(NotificationCompat.DecoratedCustomViewStyle())
-//            .setCustomContentView(notificationLayout)
-//            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-//
-//        binding.playBtn.setOnClickListener {
-//            with(NotificationManagerCompat.from(this)){
-//                notify(0, builder.build())
-//            }
-//        }
+        var i = DatabaseHelper(this).getAllData()
+        Log.i("this", i)
 
         val intent = Intent(this, MusicService::class.java)
         bindService(intent, connection, Context.BIND_AUTO_CREATE)
@@ -139,12 +130,12 @@ class MainActivity : AppCompatActivity(), MusicService.Play {
         bnv_main.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.action_radio -> {
-                    changeFragment(radioFragment)
+                    changeFragment(RadioFragment())
                     // Respond to navigation item 1 click
                 }
 
                 R.id.action_bookmark -> {
-                    changeFragment(bookMarkFragment)
+                    changeFragment(BookMarkFragment())
                     // Respond to navigation item 2 click
                 }
 //                    R.id.action_podcast -> {
@@ -152,7 +143,7 @@ class MainActivity : AppCompatActivity(), MusicService.Play {
 //                        // Respond to navigation item 3 click
 //                    }
                 R.id.action_setup -> {
-                    changeFragment(settingFragment)
+                    changeFragment(SettingFragment())
                     // Respond to navigation item 4 click
                 }
             }
@@ -164,10 +155,13 @@ class MainActivity : AppCompatActivity(), MusicService.Play {
 
             items.add(RadioStation(name, favicon, url, url_resolved))
 
+
             if (isStar == false) {
 
+                Log.i("debug : false = ", name)
+
                 // 즐겨찾기 삭제
-//                delete()
+                db.deleteData(name)
 
                 val animator = ValueAnimator.ofFloat(0f, 1f).setDuration(1000)
                 animator.addUpdateListener { animation ->
@@ -176,11 +170,11 @@ class MainActivity : AppCompatActivity(), MusicService.Play {
                 animator.start()
                 isStar = true
 
-            } else {
+            } else if(isStar == true) {
+                Log.i("debug : true = ", name)
+
 //
 //                //즐겨찾기 추가
-//                save()
-                var db = DatabaseHelper(this)
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     db.insertInfo(name, url, url_resolved, favicon, LocalDateTime.now().toString())
                 }
@@ -325,6 +319,5 @@ class MainActivity : AppCompatActivity(), MusicService.Play {
     override fun InvisibleProgress() {
         binding.progressBar.visibility = View.INVISIBLE
     }
-
 
 }
