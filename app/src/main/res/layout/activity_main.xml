@@ -11,13 +11,21 @@
         android:id="@+id/frame_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/bnv_main" />
+
+        >
+        <fragment
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:name="com.hdk.radiokotlin.fragment.RadioFragment"
+            />
+    </FrameLayout>
+<!--    android:layout_above="@id/bnv_main"-->
 
     <RelativeLayout
         android:id="@+id/linear"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:layout_above="@id/bnv_main"
+        android:layout_alignParentBottom="true"
         android:background="#EFEEEE"
         android:visibility="invisible"
         android:clickable="true">
@@ -44,19 +52,19 @@
             android:layout_marginLeft="12dp"
             />
 
-        <com.airbnb.lottie.LottieAnimationView
-            android:id="@+id/star_btn"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:layout_gravity="center"
-            android:layout_marginLeft="12dp"
-            android:layout_marginRight="12dp"
-            app:lottie_autoPlay="false"
-            app:lottie_fileName="star.json"
-            app:lottie_loop="false"
-            android:layout_toLeftOf="@id/play_btn"
-            android:layout_marginTop="5dp"
-            />
+<!--        <com.airbnb.lottie.LottieAnimationView-->
+<!--            android:id="@+id/star_btn"-->
+<!--            android:layout_width="45dp"-->
+<!--            android:layout_height="45dp"-->
+<!--            android:layout_gravity="center"-->
+<!--            android:layout_marginLeft="12dp"-->
+<!--            android:layout_marginRight="12dp"-->
+<!--            app:lottie_autoPlay="false"-->
+<!--            app:lottie_fileName="star.json"-->
+<!--            app:lottie_loop="false"-->
+<!--            android:layout_toLeftOf="@id/play_btn"-->
+<!--            android:layout_marginTop="5dp"-->
+<!--            />-->
 
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/play_btn"
@@ -84,17 +92,17 @@
 
     </RelativeLayout>
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bnv_main"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        app:menu="@menu/my_navigation_items"
-        app:itemIconTint="@drawable/menu_selector_color"
-        app:itemTextColor="@drawable/menu_selector_color"
-        app:labelVisibilityMode="labeled"
-        style="@style/CustomBottomNavigationStyle"
-        />
+<!--    <com.google.android.material.bottomnavigation.BottomNavigationView-->
+<!--        android:id="@+id/bnv_main"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_alignParentBottom="true"-->
+<!--        app:menu="@menu/my_navigation_items"-->
+<!--        app:itemIconTint="@drawable/menu_selector_color"-->
+<!--        app:itemTextColor="@drawable/menu_selector_color"-->
+<!--        app:labelVisibilityMode="labeled"-->
+<!--        style="@style/CustomBottomNavigationStyle"-->
+<!--        />-->
 
 
 </RelativeLayout>

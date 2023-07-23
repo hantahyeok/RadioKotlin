@@ -52,11 +52,11 @@ class MainActivity : AppCompatActivity(), MusicService.Play {
     private var isServiceRunning: Boolean = false
 
     var db = DatabaseHelper(this)
-    lateinit var all : String
+    lateinit var all: String
 
     // DBHelper 객체 선언
     lateinit var dbHelper: DBHelper
-    lateinit var database : SQLiteDatabase
+    lateinit var database: SQLiteDatabase
 
     private var currentFragment: Fragment? = null
 
@@ -99,7 +99,6 @@ class MainActivity : AppCompatActivity(), MusicService.Play {
     }
 
 
-
     @SuppressLint("MissingPermission", "RemoteViewLayout")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -123,72 +122,41 @@ class MainActivity : AppCompatActivity(), MusicService.Play {
         isPlay = false
         isStar = false
 
-        val bnv_main = binding.bnvMain
+//        val bnv_main = binding.bnvMain
 
         //supportFragmentManager.beginTransaction().add(R.id.fl_con, NaviHomeFragment()).commit()
 
-        bnv_main.setOnItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.action_radio -> {
-                    changeFragment(RadioFragment())
-                    // Respond to navigation item 1 click
-                }
-
-                R.id.action_bookmark -> {
-                    changeFragment(BookMarkFragment())
-                    // Respond to navigation item 2 click
-                }
-//                    R.id.action_podcast -> {
-//                        changeFragment(podcastFragment)
-//                        // Respond to navigation item 3 click
-//                    }
-                R.id.action_setup -> {
-                    changeFragment(SettingFragment())
-                    // Respond to navigation item 4 click
-                }
-            }
-            true
-        }
-        bnv_main.selectedItemId = R.id.action_radio
-
-        binding.starBtn.setOnClickListener {
-
-            items.add(RadioStation(name, favicon, url, url_resolved))
-
-
-            if (isStar == false) {
-
-                Log.i("debug : false = ", name)
-
-                // 즐겨찾기 삭제
-                db.deleteData(name)
-
-                val animator = ValueAnimator.ofFloat(0f, 1f).setDuration(1000)
-                animator.addUpdateListener { animation ->
-                    binding.starBtn.setProgress(animation.animatedValue as Float)
-                }
-                animator.start()
-                isStar = true
-
-            } else if(isStar == true) {
-                Log.i("debug : true = ", name)
-
+//        bnv_main.setOnItemSelectedListener { item ->
+//            when (item.itemId) {
+//                R.id.action_radio -> {
+//                    changeFragment(RadioFragment())
+//                    // Respond to navigation item 1 click
+//                }
 //
-//                //즐겨찾기 추가
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    db.insertInfo(name, url, url_resolved, favicon, LocalDateTime.now().toString())
-                }
+//                R.id.action_bookmark -> {
+//                    changeFragment(BookMarkFragment())
+//                    // Respond to navigation item 2 click
+//                }
+////                    R.id.action_podcast -> {
+////                        changeFragment(podcastFragment)
+////                        // Respond to navigation item 3 click
+////                    }
+//                R.id.action_setup -> {
+//                    changeFragment(SettingFragment())
+//                    // Respond to navigation item 4 click
+//                }
+//            }
+//            true
+//        }
+//        bnv_main.selectedItemId = R.id.action_radio
 
-                val animator = ValueAnimator.ofFloat(1f, 0.1f).setDuration(1000)
-                animator.addUpdateListener { animation ->
-                    binding.starBtn.setProgress(animation.animatedValue as Float)
-                }
-                animator.start()
-                isStar = false
-
-            }
-
-        }
+//        binding.starBtn.setOnClickListener {
+//
+//            items.add(RadioStation(name, favicon, url, url_resolved))
+//
+//            check()
+//
+//        }
 
 
         binding.playBtn.setOnClickListener {
@@ -210,7 +178,6 @@ class MainActivity : AppCompatActivity(), MusicService.Play {
 
             } else { // play..
 
-
                 binding.progressBar.visibility = View.VISIBLE
                 musicService?.startMusic(url, favicon, name)
 
@@ -227,14 +194,39 @@ class MainActivity : AppCompatActivity(), MusicService.Play {
 
     }// onCreate...
 
-    fun save() {
-//        val sharedPreferences = applicationContext.getSharedPreferences("MyPreferences", Context.MODE_PRIVATE)
-//        val editor = sharedPreferences.edit()
-    }
+//    fun check(){
+//        if (isStar == false) {
+//            save()
+//        } else if (isStar == true) {
+//            delete()
+//        }
+//    }
 
-    fun delete() {
-
-    }
+//    fun save() {
+//        //즐겨찾기 추가
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//            db.insertInfo(name, url, url_resolved, favicon, LocalDateTime.now().toString())
+//        }
+//
+//        val animator = ValueAnimator.ofFloat(0f, 1f).setDuration(1000)
+//        animator.addUpdateListener { animation ->
+//            binding.starBtn.setProgress(animation.animatedValue as Float)
+//        }
+//        animator.start()
+//        isStar = true
+//    }
+//
+//    fun delete() {
+//        // 즐겨찾기 삭제
+//        db.deleteData(name)
+//
+//        val animator = ValueAnimator.ofFloat(1f, 0.1f).setDuration(1000)
+//        animator.addUpdateListener { animation ->
+//            binding.starBtn.setProgress(animation.animatedValue as Float)
+//        }
+//        animator.start()
+//        isStar = false
+//    }
 
     private fun changeFragment(fragment: Fragment) {
 
@@ -261,18 +253,20 @@ class MainActivity : AppCompatActivity(), MusicService.Play {
     }
 
 
-    private  var CHANNEL_ID = "Your_Channel_ID"
+    private var CHANNEL_ID = "Your_Channel_ID"
 
     @SuppressLint("RemoteViewLayout")
     private fun showNotification() {
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val name = "App Notification"
             val descriptionText = "This is your notificationdescription"
-            val importnace : Int = NotificationManager.IMPORTANCE_DEFAULT
-            val channel : NotificationChannel = NotificationChannel(CHANNEL_ID, name, importnace).apply {
-                description = descriptionText
-            }
-            val notificationManager: NotificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            val importnace: Int = NotificationManager.IMPORTANCE_DEFAULT
+            val channel: NotificationChannel =
+                NotificationChannel(CHANNEL_ID, name, importnace).apply {
+                    description = descriptionText
+                }
+            val notificationManager: NotificationManager =
+                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.createNotificationChannel(channel)
         }
     }
@@ -282,9 +276,10 @@ class MainActivity : AppCompatActivity(), MusicService.Play {
     fun getMedia(favicon: String, name: String, url: String, url_resolved: String) {
         binding.progressBar.visibility = View.VISIBLE
 
+        isPlay = false
+
         musicService?.stopMusic()
         musicService?.startMusic(url, favicon, name)
-
 
 
         val animator = ValueAnimator.ofFloat(0f, 0.5f).setDuration(1000)

@@ -72,7 +72,6 @@ class MyAdapter constructor(var context: Context, var items: MutableList<RadioSt
     }
 
 
-
     interface ItemClickListener {
         fun onItemClick(url: String, favicon: String, name: String, url_resolved: String)
     }

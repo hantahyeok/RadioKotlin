@@ -18,6 +18,7 @@ import android.widget.PopupWindow
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.google.gson.Gson
+import com.hdk.radiokotlin.DatabaseHelper
 import com.hdk.radiokotlin.MainActivity
 import com.hdk.radiokotlin.MusicService
 import com.hdk.radiokotlin.adapter.MyAdapter
@@ -210,6 +211,14 @@ class RadioFragment : Fragment(), OnItemSelectedListener, MyAdapter.ItemClickLis
 
         val mainActivity = activity as MainActivity
         mainActivity.getMedia(favicon, name, url, url_resolved)
+
+//        var db = DatabaseHelper(context)
+//        var all = db.getAllData()
+//        if(all.contains("MBC FM4U")){
+//            MainActivity().apply {
+//                save()
+//            }
+//        }
 //        MainActivity().getMedia(favicon, name, url, url_resolved)
     }
 
