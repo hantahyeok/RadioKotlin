@@ -4,13 +4,13 @@
     <item android:id="@+id/action_radio"
         android:title="@string/item_radio"
         android:icon="@drawable/item_radio" />
-    <item android:id="@+id/action_bookmark"
-        android:title="@string/item_bookmark"
-        android:icon="@drawable/item_star_black" />
-<!--    <item android:id="@+id/action_podcast"-->
-<!--        android:title="@string/item_podcast"-->
-<!--        android:icon="@drawable/item_podcast" />-->
-    <item android:id="@+id/action_setup"
-        android:title="@string/item_setup"
-        android:icon="@drawable/item_settings" />
+<!--    <item android:id="@+id/action_bookmark"-->
+<!--        android:title="@string/item_bookmark"-->
+<!--        android:icon="@drawable/item_star_black" />-->
+<!--&lt;!&ndash;    <item android:id="@+id/action_podcast"&ndash;&gt;-->
+<!--&lt;!&ndash;        android:title="@string/item_podcast"&ndash;&gt;-->
+<!--&lt;!&ndash;        android:icon="@drawable/item_podcast" />&ndash;&gt;-->
+<!--    <item android:id="@+id/action_setup"-->
+<!--        android:title="@string/item_setup"-->
+<!--        android:icon="@drawable/item_settings" />-->
 </menu>

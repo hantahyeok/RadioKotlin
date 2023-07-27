@@ -90,7 +90,7 @@ class MusicService : Service() {
                     mp.setVolume(1.0f, 1.0f)
                     mp.start() // 준비가 완료되면 재생 시작
 
-                    Toast.makeText(this, "음악 플레이중...", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Music Start!", Toast.LENGTH_SHORT).show()
                     playListener?.InvisibleProgress() // MainActivity로 메시지 전달
                 }
                 mediaPlayer.prepareAsync()

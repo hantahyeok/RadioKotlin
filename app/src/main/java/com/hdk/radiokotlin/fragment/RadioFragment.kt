@@ -1,6 +1,7 @@
 package com.hdk.radiokotlin.fragment
 
 import android.animation.ValueAnimator
+import android.content.Context
 import android.content.Intent
 import android.media.MediaPlayer
 import android.os.Bundle
@@ -159,7 +160,12 @@ class RadioFragment : Fragment(), OnItemSelectedListener, MyAdapter.ItemClickLis
 
         binding.spinner.adapter = arrayAdapter
         binding.spinner.onItemSelectedListener = this
-        binding.spinner.setSelection(57)
+
+        // 저장된 값을 불러옴
+        val savedNumber = getNumberFromPreferences(requireContext())
+        // 이후 savedNumber 변수에는 30이 저장되어 있음
+
+        binding.spinner.setSelection(savedNumber)
 
 //        view.findViewById<>(R.id.animation_view)
 
@@ -170,6 +176,8 @@ class RadioFragment : Fragment(), OnItemSelectedListener, MyAdapter.ItemClickLis
 
         var selectedItem = spList[position]
         var str = selectedItem.substringAfterLast(" ")
+
+        saveNumberToPreferences(requireContext(), position)
 
         thread {
             var server: String =
@@ -201,6 +209,25 @@ class RadioFragment : Fragment(), OnItemSelectedListener, MyAdapter.ItemClickLis
         }
 
 
+    }
+
+    // 값을 불러올 때 호출하는 함수
+    fun getNumberFromPreferences(context: Context): Int {
+        val sharedPref = context.getSharedPreferences("MyPreferences", Context.MODE_PRIVATE)
+        return sharedPref.getInt("KEY_NUMBER", 0) // 기본값으로 0을 설정 (만약 저장된 값이 없을 경우)
+    }
+
+    // 값을 저장할 때 호출하는 함수 (덮어쓰기 방식)
+    fun saveNumberToPreferences(context: Context, number: Int) {
+        val sharedPref = context.getSharedPreferences("MyPreferences", Context.MODE_PRIVATE)
+        val editor = sharedPref.edit()
+
+        // 기존의 값을 삭제
+        editor.clear()
+
+        // 새로운 값을 저장
+        editor.putInt("KEY_NUMBER", number)
+        editor.apply()
     }
 
     override fun onNothingSelected(parent: AdapterView<*>?) {

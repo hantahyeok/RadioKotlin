@@ -1,9 +1,9 @@
 <resources>
-    <string name="app_name">RadioKotlin</string>
+    <string name="app_name">Radio</string>
 
-    <string name="item_radio">라디오</string>
-    <string name="item_bookmark">즐겨찾기</string>
-    <string name="item_podcast">팟캐스트</string>
-    <string name="item_setup">설정</string>
+    <string name="item_radio">Radio</string>
+<!--    <string name="item_bookmark">즐겨찾기</string>-->
+<!--    <string name="item_podcast">팟캐스트</string>-->
+<!--    <string name="item_setup">설정</string>-->
 
 </resources>
